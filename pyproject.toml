@@ -1,0 +1,48 @@
+[tool.ruff]
+line-length = 99
+target-version = "py311"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"  
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # bugbear
+    "PL",  # pylint (subset)
+    "UP",  # pyupgrade
+    "D",   # pydocstyle
+    "C90", # mccabe complexity
+    "N",   # pep8-naming
+    "W",   # pycodestyle warnings
+    "S",   # bandit security
+    "A",   # flake8-builtins
+    "RUF", # ruff-specific
+]
+
+ignore = [
+    "PLR2004",  # magic values
+    "PLR0913",  # troppi argomenti
+    # "PLR0912"   # troppi branch
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+force-sort-within-sections = true
+
+
+[tool.mypy]
+python_version = "3.11"
+install_types = true
+explicit_package_bases = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
