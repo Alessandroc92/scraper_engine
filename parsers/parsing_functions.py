@@ -12,5 +12,5 @@ def json_ld_parser(html_object: str) -> list:
         list: A list of all the elements in the JSON Linked data
     """
     jslde = extruct.jsonld.JsonLdExtractor()
-    data = jslde.extract(html)
+    data = jslde.extract(html_object)
     return data
