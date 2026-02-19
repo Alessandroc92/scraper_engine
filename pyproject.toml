@@ -1,3 +1,7 @@
+[build-system]
+requires = ['setuptools','wheel']
+
+
 [tool.ruff]
 line-length = 99
 target-version = "py311"
