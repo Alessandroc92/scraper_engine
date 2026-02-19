@@ -1,5 +1,6 @@
 """A module containing parsing functs for different types of inputs"""
 import extruct
+from bs4 import BeautifulSoup
 
 
 def json_ld_parser(html_object: str) -> list:
