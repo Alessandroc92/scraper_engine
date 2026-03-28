@@ -10,17 +10,17 @@ CLIENT_IDENTIFIER = os.getenv("CLIENT_IDENTIFIER")
 
 def mimic_browser_request(
     url: str,
-    method: Literal["GET", "POST"],
+    method: Literal["get", "post"],
     headers: dict | None = None,
     proxy: str | None = None,
     payload: dict | None = None,
     session: curl_cffi.Session | None = None,
 ) -> curl_cffi.Response:
-    """_A function that mimics a browser requests either in GET or POST.
+    """_A function that mimics a browser requests either in get or post.
 
     Args:
         url (str): The url that needs to be fetched.
-        method (str): The CURL method (GET or POST)
+        method (str): The CURL method (get or post)
         headers (dict | None, optional): Headers for the request.
         proxy (str | None, optional): Using proxy or not.
         payload (dict | None, optional): Payload for the request.
@@ -33,21 +33,13 @@ def mimic_browser_request(
     if not session:
         session = create_client_session()
 
-    response: curl_cffi.Response
-    if method == "GET":
-        response = session.get(
-            url=url,
-            headers=headers,
-            params=payload,
-            proxy=proxy,
-        )
-    elif method == "POST":
-        response = session.post(
-            url=url,
-            headers=headers,
-            params=payload,
-            proxy=proxy,
-        )
+    request_attribute = getattr(session, method)
+    response: curl_cffi.Response = request_attribute(
+        url=url,
+        headers=headers,
+        params=payload,
+        proxy=proxy,
+    )
     return response
 
 
