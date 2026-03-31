@@ -1,26 +1,14 @@
-"""A module that collects request handlers."""
+"""A module that deals with handling HTTP responses."""
 
-from typing import Literal
-
-import curl_cffi
-import httpx  # type: ignore[import-not-found]
-import requests  # type: ignore[import-untyped]
+from typing import runtime_checkable
 
 
-def response_handler(
-    response_object: Literal[
-        requests.Response,
-        curl_cffi.Response,
-        httpx.Response,
-    ],
-) -> dict:
-    """A function that handle an HttpResponse and get back its elements.
+@runtime_checkable
+class HttpResponse(Protocol):
+    """Minimal interface that every adapter response must expose."""
 
-    Args:
-        response_object: (Literal[ requests.Response, curl_cffi.Response, httpx.Response]):
-        a response http object which allows for different response types.
-
-    Returns:
-        dict: _description_
-    """
-    pass
+    @property
+    def status_code(self) -> int: ...
+    @property
+    def text(self) -> str: ...
+    def json(self) -> Any: ...
