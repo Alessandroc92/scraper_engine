@@ -1,56 +1,14 @@
 """A module that contains functions that mimic browser requests."""
 
+from __future__ import annotations
+
 import os
-from typing import Any, Literal, Protocol, runtime_checkable
+from typing import Any, Literal, Protocol
 
 import curl_cffi
+from handlers.response_handler import HttpResponse
 
 CLIENT_IDENTIFIER = os.getenv("CLIENT_IDENTIFIER")
-
-
-class HttpSession(Protocol):
-    def request(self, method: str, url: str, **kwargs: Any) -> Any: ...
-
-
-@runtime_checkable
-class HttpResponse(Protocol):
-    """Minimal interface that every adapter response must expose."""
-
-    @property
-    def status_code(self) -> int: ...
-    @property
-    def text(self) -> str: ...
-    def json(self) -> Any: ...
-
-
-class CurlCffiAdapter:
-    def __init__(self, session):
-        self.session = session
-
-    def request(self, method: str, url: str, proxy=None, **kwargs: Any) -> Any:
-        method = method.strip().lower()
-        if method not in ["get", "post", "delete", "put"]:
-            raise ValueError(f"The method={method} your requested is not allowed.")
-        if proxy:
-            kwargs["proxy"] = proxy
-        request_attribute = getattr(self.session, method)
-        response = request_attribute(url=url, **kwargs)
-        return response
-
-
-class RequestsAdapter:
-    def __init__(self, session):
-        self.session = session
-
-    def request(self, method: str, url: str, proxy=None, **kwargs: Any) -> Any:
-        method = method.strip().lower()
-        if method not in ["get", "post", "delete", "put"]:
-            raise ValueError(f"The method={method} your requested is not allowed.")
-        if proxy:
-            kwargs["proxies"] = {"http": proxy, "https": proxy}
-        request_attribute = getattr(self.session, method)
-        response = request_attribute(url=url, **kwargs)
-        return response
 
 
 class SyncFetcher:
@@ -106,4 +64,38 @@ class SyncFetcher:
             params=payload,
             proxy=proxy or self.proxy,
         )
+        return response
+
+
+class HttpSession(Protocol):
+    def request(self, method: str, url: str, **kwargs: Any) -> Any: ...
+
+
+class CurlCffiAdapter:
+    def __init__(self, session):
+        self.session = session
+
+    def request(self, method: str, url: str, proxy=None, **kwargs: Any) -> Any:
+        method = method.strip().lower()
+        if method not in ["get", "post", "delete", "put"]:
+            raise ValueError(f"The method={method} your requested is not allowed.")
+        if proxy:
+            kwargs["proxy"] = proxy
+        request_attribute = getattr(self.session, method)
+        response = request_attribute(url=url, **kwargs)
+        return response
+
+
+class RequestsAdapter:
+    def __init__(self, session):
+        self.session = session
+
+    def request(self, method: str, url: str, proxy=None, **kwargs: Any) -> Any:
+        method = method.strip().lower()
+        if method not in ["get", "post", "delete", "put"]:
+            raise ValueError(f"The method={method} your requested is not allowed.")
+        if proxy:
+            kwargs["proxies"] = {"http": proxy, "https": proxy}
+        request_attribute = getattr(self.session, method)
+        response = request_attribute(url=url, **kwargs)
         return response
