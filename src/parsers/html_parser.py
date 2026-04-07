@@ -30,6 +30,9 @@ class HtmlParser:
         if self._soup_object is None:
             self._soup_object = BeautifulSoup(self.html_object, self.parser_engine)
         return self._soup_object
+    
+    def prettify_response(self):
+        return self._get_soup().prettify()
 
     def select_elements(self, css_selector: str, **kwargs: Any) -> list[Tag]:
         """A method that returns html elements via a CSS selector.
