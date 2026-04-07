@@ -40,9 +40,10 @@ class SyncFetcher:
         method: Literal["get", "post", "delete", "put"],
         headers: dict | None = None,
         proxy: str | None = None,
+        params: dict | None = None,
         payload: dict | None = None,
         **kwargs: Any,
-    ) -> HttpResponse:
+    ) -> Any:
         """A function that mimics a browser requests.
 
         Args:
@@ -50,6 +51,7 @@ class SyncFetcher:
             method (str): The CURL method (get or post)
             headers (dict | None, optional): Headers for the request.
             proxy (str | None, optional): Using proxy or not.
+            params (str | None, optional): Params for the request.
             payload (dict | None, optional): Payload for the request.
             session (HttpClientSession | None, optional): A curl_cffi
             session.
@@ -61,7 +63,8 @@ class SyncFetcher:
             method=method,
             url=url,
             headers=headers,
-            params=payload,
+            params=params,
+            data=payload,
             proxy=proxy or self.proxy,
         )
         return response
