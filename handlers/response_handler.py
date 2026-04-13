@@ -1,6 +1,6 @@
 """A module that deals with handling HTTP responses."""
 
-from typing import runtime_checkable
+from typing import runtime_checkable, Protocol, Any
 
 
 @runtime_checkable
