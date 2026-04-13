@@ -1,0 +1,32 @@
+version: 1
+disable_existing_loggers: true
+
+formatters:
+  text: 
+    style: "{"
+    format: "TIME: {asctime}(msecs)03d – LOGGER_NAME: {name} - LEVEL: {levelname} - MODULE: {filename} - LINE: {lineno} - {message}"
+  json: 
+    "()": configs.json_formatter.JsonFormatter
+
+handlers:
+  console:
+    formatter: text
+    class: logging.StreamHandler
+  text_file:
+    formatter: text
+    class: logging.handlers.TimedRotatingFileHandler
+    when: 'M'
+    filename: app.log
+    backupCount: 5
+  json_file:
+    formatter: json
+    class: logging.handlers.SizeRotatingFileHandler
+    filename: app.json
+
+loggers:
+  root:
+    level: DEBUG
+  my_app:
+    level: DEBUG
+    propagate: false
+
