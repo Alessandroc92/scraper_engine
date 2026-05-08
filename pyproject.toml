@@ -1,5 +1,26 @@
 [build-system]
-requires = ['setuptools','wheel']
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mio-package"
+version = "0.1.0"
+description = "Il mio package riutilizzabile"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Tuo Nome" }
+]
+dependencies = []
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+scraper_engine = ["loggers/*.yaml"]
 
 
 [tool.ruff]
