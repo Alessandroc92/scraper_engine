@@ -1,0 +1,39 @@
+version: 1
+disable_existing_loggers: true
+
+formatters:
+  text: 
+    "()": scraper_engine.loggers.configs.custom_formatters.TextFormatter
+  json: 
+    "()": scraper_engine.loggers.configs.custom_formatters.JSONFormatter
+
+handlers:
+  console:
+    formatter: text
+    class: logging.StreamHandler
+  text_file:
+    formatter: text
+    "()": scraper_engine.loggers.configs.custom_handlers.CustomTimeRotatingHandler
+    filename: "logs/app.log"
+    when: 'midnight'
+    backupCount: 5
+    level: DEBUG
+    utc: true
+  json_file:
+    formatter: json
+    "()": scraper_engine.loggers.configs.custom_handlers.CustomFileRotatingHandler
+    filename: "logs/app.jsonl"
+    mode: "a"
+    maxBytes: 10485760 # 2**20*10=10megabytes
+    backupCount: 5
+    encoding: "utf-8"
+    level: DEBUG
+
+loggers:
+  root:
+    level: WARNING
+  app:
+    level: DEBUG
+    handlers: [json_file, text_file, console]
+    propagate: true
+
