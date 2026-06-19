@@ -28,15 +28,7 @@ class SyncFetcher:
         session: HttpSession | None = None,
     ):
         self.proxy = proxy
-        self.session = session or self._default_session()
-
-    def _default_session(self) -> HttpSession:
-        """An internal methdo to create the default client session.
-
-        Returns:
-            HttpClientSession: An HTTP Client Session.
-        """
-        return CurlCffiAdapter(session=curl_cffi.Session(impersonate=CLIENT_IDENTIFIER))
+        self.session = session
 
     def request(
         self,
@@ -47,7 +39,7 @@ class SyncFetcher:
         params: dict | None = None,
         payload: dict | None = None,
         **kwargs: Any,
-    ) -> Any:
+    ) -> HttpResponse:
         """A function that mimics a browser requests.
 
         Args:
@@ -63,7 +55,6 @@ class SyncFetcher:
         Returns:
             HttpResponse: The response from the requested url.
         """
-        logger.error('Incoming Request',extra={'url':url})
         response = self.session.request(
             method=method,
             url=url,
