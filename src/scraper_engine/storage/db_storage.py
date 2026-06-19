@@ -4,7 +4,7 @@ import logging
 from typing import Any
 
 from sqlalchemy import MetaData, Table, create_engine, Select, Insert, Update, Delete
-from sqlalchemy.engine import Connection
+from sqlalchemy.engine import Connection, Engine
 
 from scraper_engine import loggers
 
@@ -13,8 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class DbStorage:
-    def __init__(self, db_url: str):
+    def __init__(self, db_url: str, echo: bool = False):
         self.db_url = db_url
+        self.echo = echo
         self.metadata = self.instantiate_metadata()
         self.engine = self.create_engine_instance()
 
@@ -22,8 +23,8 @@ class DbStorage:
         return MetaData()
 
 
-    def create_engine_instance(self):
-        engine = create_engine(url=self.db_url)
+    def create_engine_instance(self) -> Engine:
+        engine = create_engine(url=self.db_url, echo=self.echo)
         return engine
 
     @contextmanager
@@ -51,4 +52,7 @@ class DbStorage:
         with self.create_transaction() as conn:
             result = conn.execute(stmt)
             return getattr(result, 'rowcount', None)
+        
+    def drop_table(self, table: Table):
+        return table.drop(self.engine, checkfirst=True)
 
