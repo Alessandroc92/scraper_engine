@@ -28,7 +28,16 @@ class SyncFetcher:
         session: HttpSession | None = None,
     ):
         self.proxy = proxy
-        self.session = session
+        self.session = session or self._default_session()
+        
+        
+    def _default_session(self) -> HttpSession:
+        """An internal methdo to create the default client session.
+
+        Returns:
+            HttpClientSession: An HTTP Client Session.
+        """
+        return CurlCffiAdapter(session=curl_cffi.Session(impersonate=CLIENT_IDENTIFIER))
 
     def request(
         self,
