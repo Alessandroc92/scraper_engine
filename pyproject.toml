@@ -5,14 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "scraper-engine"
 version = "0.1.0"
-description = "Engine riutilizzabile per scraping, fetching, parsing, logging e storage"
+description = "A reusable project for fetching, parsing, logging and storage data via webscraping."
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Alessandro Ciapetti" }]
 dependencies = [
+    "bs4>=0.0.2",
     "curl-cffi>=0.15.0",
     "extruct>=0.18.0",
+    "psycopg2>=2.9.12",
     "pyyaml>=6.0.3",
+    "sqlalchemy>=2.0.52",
 ]
 
 [tool.setuptools]
